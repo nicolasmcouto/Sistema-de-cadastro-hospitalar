@@ -5,5 +5,5 @@ import Estudo.Domain.ContatosDeEmergencia;
 
 import java.util.List;
 
-public record PacienteCadastroDTO (String nome, List<ContatosDeEmergencia> contatosDeEmergencia){
+public record PacienteCadastroDTO (String nome, List<ContatosDeEmergenciaDTO> contatosDeEmergencia){
 }

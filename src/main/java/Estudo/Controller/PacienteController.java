@@ -2,16 +2,14 @@ package Estudo.Controller;
 
 import Estudo.Domain.DTOs.ContatosDeEmergenciaDTO;
 import Estudo.Domain.DTOs.PacienteCadastroDTO;
+import Estudo.Domain.DTOs.PacienteResponseDTO;
 import Estudo.Domain.PacienteEntity;
 import Estudo.Service.PacientService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("pacientes")
@@ -22,10 +20,26 @@ public class PacienteController {
 
     @PostMapping("cadastro")
     @Transactional
-    public ResponseEntity<PacienteEntity> CadastroDePaciente(@RequestBody PacienteCadastroDTO dados) {
-        var paciente = new PacienteEntity(dados.nome(),dados.contatosDeEmergencia());
-        service.cadastroDePaciente(dados);
-        return ResponseEntity.ok(paciente);
+    public ResponseEntity<PacienteResponseDTO> CadastroDePaciente(@RequestBody PacienteCadastroDTO dados) {
+       var response = service.cadastroDePaciente(dados);
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping
+    @Transactional
+    public ResponseEntity<PacienteEntity> AtualizacaoDeCadastro(){
+
+    }
+
+    @GetMapping
+    @Transactional
+    public ResponseEntity<PacienteEntity> ListagemDePacientes(){
+
+    }
+
+    @DeleteMapping
+    public ResponseEntity<PacienteEntity> excluir(){
+
     }
 
 

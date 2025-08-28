@@ -15,7 +15,6 @@ import java.util.List;
 @Table(name = "pacientes")
 @Entity(name = "Paciente")
 @Getter
-@NoArgsConstructor
 @EqualsAndHashCode(of = "id")
 public class PacienteEntity {
 
@@ -35,7 +34,9 @@ public class PacienteEntity {
     }
 
     public PacienteEntity() {
+
     }
+
 
     public Long getId() {return id;}
     public String getNome() {return nome;}
