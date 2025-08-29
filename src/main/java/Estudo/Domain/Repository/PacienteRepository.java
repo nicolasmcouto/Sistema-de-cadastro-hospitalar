@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface PacienteRepository extends JpaRepository <PacienteEntity, Long> {
 
-    List<PacienteEntity> findByNomeStartingWithIgnoreCasa(String nome);
+    List<PacienteEntity> findByNomeStartingWithIgnoreCase(String nome);
 
 
 }
