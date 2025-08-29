@@ -1,15 +1,19 @@
 package Estudo.Controller;
 
-import Estudo.Domain.DTOs.ContatosDeEmergenciaDTO;
+
+import Estudo.Domain.DTOs.PacienteAtualizacaoDTO;
 import Estudo.Domain.DTOs.PacienteCadastroDTO;
 import Estudo.Domain.DTOs.PacienteResponseDTO;
-import Estudo.Domain.PacienteEntity;
+import Estudo.Domain.Repository.PacienteRepository;
 import Estudo.Service.PacientService;
 import jakarta.transaction.Transactional;
+import org.aspectj.apache.bcel.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Collections;
+import java.util.List;
 
 @RestController
 @RequestMapping("pacientes")
@@ -18,6 +22,9 @@ public class PacienteController {
     @Autowired
     private PacientService service;
 
+    @Autowired
+    private PacienteRepository repository;
+
     @PostMapping("cadastro")
     @Transactional
     public ResponseEntity<PacienteResponseDTO> CadastroDePaciente(@RequestBody PacienteCadastroDTO dados) {
@@ -25,20 +32,26 @@ public class PacienteController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping
-    @Transactional
-    public ResponseEntity<PacienteEntity> AtualizacaoDeCadastro(){
 
+    @GetMapping("listagem")
+    public ResponseEntity<List<PacienteResponseDTO>>ListagemDePacientes(@RequestParam String nome){
+
+        var pacientes =  service.buscaPorNome(nome);
+        return ResponseEntity.ok(pacientes);
+    }
+    @PutMapping("{id}")
+    @Transactional
+    public  ResponseEntity<PacienteResponseDTO>AtualizacaoDeCadastro(@PathVariable Long id, @RequestBody PacienteAtualizacaoDTO dto){
+        var response = service.atualizacaoDeCadastro(id, dto);
+
+        return ResponseEntity.ok(response);
     }
 
-    @GetMapping
+    @DeleteMapping("{id}")
     @Transactional
-    public ResponseEntity<PacienteEntity> ListagemDePacientes(){
-
-    }
-
-    @DeleteMapping
-    public ResponseEntity<PacienteEntity> excluir(){
+    public ResponseEntity DeletarUsuario(@PathVariable Long id){
+        repository.deleteAllById(Collections.singleton(id));
+        return ResponseEntity.noContent().build();
 
     }
 

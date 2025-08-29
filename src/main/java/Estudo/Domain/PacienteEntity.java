@@ -1,13 +1,9 @@
 package Estudo.Domain;
 
-import Estudo.Domain.DTOs.ContatosDeEmergenciaDTO;
 import jakarta.persistence.*;
 
-import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +21,7 @@ public class PacienteEntity {
     private String nome;
 
     @OneToMany(mappedBy = "paciente", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ContatosDeEmergencia>contato;
+    private List<ContatosDeEmergencia>contato = new ArrayList<>();
 
 
     public PacienteEntity(String name, List<ContatosDeEmergencia> contato) {

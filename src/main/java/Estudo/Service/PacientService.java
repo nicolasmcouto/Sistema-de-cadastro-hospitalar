@@ -3,6 +3,7 @@ package Estudo.Service;
 
 import Estudo.Domain.ContatosDeEmergencia;
 import Estudo.Domain.DTOs.ContatosDeEmergenciaDTO;
+import Estudo.Domain.DTOs.PacienteAtualizacaoDTO;
 import Estudo.Domain.DTOs.PacienteCadastroDTO;
 import Estudo.Domain.DTOs.PacienteResponseDTO;
 import Estudo.Domain.PacienteEntity;
@@ -10,9 +11,11 @@ import Estudo.Domain.Repository.PacienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Pageable;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import static java.util.Collections.unmodifiableList;
 
 
 @Service
@@ -35,14 +38,38 @@ public class PacientService {
                 .map(c -> new ContatosDeEmergenciaDTO(c.getName(), c.getContato()))
                 .toList());
     }
-    public PacienteResponseDTO buscaPorNome(String nome){
-        return repository.findByNomeStartingWithIgnoreCasa(nome)
+    public List<PacienteResponseDTO> buscaPorNome(String nome){
+        return repository.findByNomeStartingWithIgnoreCase(nome)
                 .stream().map(p -> new PacienteResponseDTO(
                         p.getId(),
                         p.getNome(),
                         p.getContato().stream().map((contatosDeEmergencia -> new ContatosDeEmergenciaDTO(contatosDeEmergencia.getName(), contatosDeEmergencia.getContato())))
                         .toList()
                 )).toList();
+    }
+    public PacienteResponseDTO atualizacaoDeCadastro(Long id, PacienteAtualizacaoDTO dto) {
+
+        var paciente = repository.getReferenceById(id);
+
+        if (dto.nome() != null) {
+            paciente.setNome(dto.nome());
+
+        }
+        if (dto.contatosDeEmergencia() != null) {
+
+            paciente.getContato().clear();
+            dto.contatosDeEmergencia().forEach(c -> {
+                ContatosDeEmergencia contato = new ContatosDeEmergencia(c.nome(), paciente, c.contato());
+                paciente.getContato().add(contato);
+            });
+
+
+        }
+
+
+        var salvo = repository.save(paciente);
+        return new PacienteResponseDTO(salvo.getId(), salvo.getNome(), salvo.getContato().stream().map(c -> new ContatosDeEmergenciaDTO(c.getName(), c.getContato())).toList());
+
 
     }
 

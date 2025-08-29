@@ -20,7 +20,7 @@ public class ContatosDeEmergencia {
 
     private String nome;
 
-     private double contato;
+     private Double contato;
 
     @ManyToOne
     @JoinColumn(name = "paciente_id")
